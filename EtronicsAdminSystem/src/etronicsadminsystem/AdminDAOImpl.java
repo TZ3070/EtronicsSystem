@@ -7,8 +7,6 @@ package etronicsadminsystem;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +18,7 @@ import java.util.List;
  *
  * @author Brian
  */
-public class AdminDAOImpl implements AdminDAO{
+public class AdminDAOImpl implements AdminDAO {
     
     private Connection conn = null;
     private Statement statement = null;
@@ -90,8 +88,24 @@ public class AdminDAOImpl implements AdminDAO{
     }
 
     @Override
-    public void insertProduct(Product p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void insertProduct(Product p){
+        try{
+            cStmt = conn.prepareCall("{call insert_product(?,?,?,?)}");
+            cStmt.setString(1, p.getName());
+            cStmt.setString(2, p.getType());
+            cStmt.setString(3, p.getDescription());
+            cStmt.setInt(4, p.getPrice());
+            cStmt.execute();
+        }catch(SQLException se){
+            throw new RuntimeException("Error communicating with server.", se);
+        }finally{
+            try{
+                if(cStmt != null)
+                    cStmt.close();
+            }catch(SQLException se){
+                System.out.println("Error closing callable statement.");
+            }
+        }
     }
 
     @Override

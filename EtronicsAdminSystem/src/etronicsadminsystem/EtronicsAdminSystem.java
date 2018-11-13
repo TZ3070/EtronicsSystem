@@ -21,6 +21,8 @@ public class EtronicsAdminSystem {
         UIAdminModel model = new UIAdminModel();
         UIAdminView view = new UIAdminView(model);
         AdminDAOImpl adminDAO = new AdminDAOImpl();
+        UIAdminController controller = new UIAdminController();
+        
         List<Product> prods = adminDAO.getAllProducts();
         
         int size = prods.size();
